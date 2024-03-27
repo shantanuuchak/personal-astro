@@ -1,0 +1,40 @@
+---
+import type { Tech } from "@utils/technologies.astro";
+import type { SizeType } from "@utils/types";
+import TechIcon from "./TechIcon.astro";
+
+interface Props {
+  technologies: Tech[];
+  size: SizeType;
+}
+
+const { technologies, size } = Astro.props;
+---
+
+<ul class={`tech tech--${size}`}>
+  {technologies.map((tech) => <TechIcon tech={tech} size={size} />)}
+</ul>
+
+<style>
+  .tech {
+    align-self: start;
+    grid-column: 3 / -3;
+    grid-row: 3 / 4;
+    display: flex;
+    gap: var(--space-8);
+    margin-top: var(--space-16);
+    overflow: hidden;
+  }
+
+  .tech--small {
+    grid-column: 2 / -2;
+    gap: var(--space-4);
+  }
+
+  @media only screen and (max-width: 25em /* 400px */) {
+    .tech--large {
+      grid-column: 1 / -1;
+      padding: 0 var(--space-32);
+    }
+  }
+</style>

@@ -1,0 +1,109 @@
+---
+import type { Tech } from "../../utils/technologies.astro";
+
+export type SkillLevelType = "advanced" | "good" | "basic" | "other";
+
+interface Props {
+  tech: Tech;
+  type: SkillLevelType;
+}
+
+const { tech, type } = Astro.props;
+---
+
+<li class={`skill skill--${type}`}>
+  <figure class="skill__figure">
+    <div class="skill__border">
+      <div class="skill__icon-container">
+        <tech.icon className="skill__icon" size="100%" title={tech.name} />
+      </div>
+    </div>
+    <figcaption class="skill__name">
+      {tech.name}
+    </figcaption>
+  </figure>
+</li>
+
+<style define:vars={{ "icon-color": tech.color, "icon-bg": tech.bg }}>
+  .skill {
+    position: relative;
+  }
+  .skill--advanced .skill__border {
+    background: var(--white);
+  }
+  .skill--good .skill__border {
+    background: var(--white);
+  }
+  .skill--basic .skill__border,
+  .skill--other .skill__border {
+    background: var(--white);
+  }
+
+  .skill__border {
+    padding: var(--space-4);
+    border-radius: calc(var(--radius-default) + var(--space-4));
+    box-shadow: var(--shadow-button);
+  }
+
+  .skill__figure {
+    --radius: var(--radius-default);
+    --gap: var(--space-4);
+
+    display: grid;
+
+    gap: var(--gap);
+  }
+
+  .skill__icon-container {
+    background-color: var(--c6);
+    display: grid;
+    place-content: center;
+    padding: 25%;
+    border-radius: var(--radius);
+    box-shadow: 0 0 0 var(--space-4) var(--white);
+    transition: background-color 0.5s,
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .skill:hover .skill__icon-container {
+    background-color: var(--icon-bg);
+    transform: translateY(-3rem);
+  }
+  .skill--advanced .skill__icon-container {
+    box-shadow: 0 0 0 var(--space-4) var(--white);
+  }
+  .skill--basic .skill__icon-container {
+    background: var(--c8);
+  }
+  .skill--other .skill__icon-container {
+    background: var(--c8);
+  }
+
+  .skill__icon {
+    color: var(--white);
+    transition: color 0.5s;
+  }
+  .skill:hover .skill__icon {
+    color: var(--icon-color);
+  }
+
+  .skill__name {
+    font-size: var(--font-xs);
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
+    margin-bottom: var(--space-8);
+    color: var(--c6dark);
+    position: absolute;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 0.1s;
+  }
+  .skill:hover .skill__name {
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
+  .skill--basic .skill__name,
+  .skill--other .skill__name {
+    color: var(--c8dark);
+  }
+</style>

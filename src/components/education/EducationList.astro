@@ -1,0 +1,51 @@
+---
+import { getCollection } from "astro:content";
+
+import type { LanguageSelectionType } from "@utils/types";
+import EducationItem from "./EducationItem.astro";
+
+interface Props {
+  lang: LanguageSelectionType;
+}
+
+const { lang } = Astro.props;
+
+const educationList = await getCollection("education", ({ id }) => {
+  return id.startsWith(`${lang}/`);
+});
+---
+
+<ol class="list mid-col">
+  {educationList.map((item) => <EducationItem lang={lang} item={item} />)}
+</ol>
+
+<style>
+  .list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 0 var(--side-padding);
+    margin-top: var(--space-96);
+    column-gap: var(--space-32);
+  }
+
+  @media only screen and (max-width: 78.5em /* 1256px */) {
+    .list {
+      grid-template-columns: 1fr 1fr;
+      justify-self: center;
+      max-width: 90rem;
+    }
+  }
+
+  @media only screen and (max-width: 62.5em /* 1000px */) {
+    .list {
+      margin-top: var(--space-64);
+    }
+  }
+
+  @media only screen and (max-width: 32.25em /* 516px */) {
+    .list {
+      grid-template-columns: 1fr;
+      max-width: 62rem;
+    }
+  }
+</style>

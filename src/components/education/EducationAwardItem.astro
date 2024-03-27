@@ -1,0 +1,97 @@
+---
+import { BookBookmark, Coins, Medal, Trophy } from "phosphor-react";
+import type { AwardType } from "./EducationAwards.astro";
+
+interface Props {
+  award: AwardType;
+  index: number;
+}
+
+const { award, index } = Astro.props;
+---
+
+<li class="container">
+  <div class="header">
+    <p class="year">
+      {award.year}
+    </p>
+    <div class="icon-container">
+      {index === 0 && <Trophy weight="duotone" size="100%" className="icon" />}
+      {index === 1 && <Medal weight="duotone" size="100%" className="icon" />}
+      {
+        index === 2 && (
+          <BookBookmark weight="duotone" size="100%" className="icon" />
+        )
+      }
+      {index === 3 && <Coins weight="duotone" size="100%" className="icon" />}
+    </div>
+    <h4 class="heading">
+      {award.title}
+    </h4>
+  </div>
+  <p class="desc">
+    {award.desc}
+  </p>
+</li>
+
+<style>
+  .container {
+    color: var(--c2dark);
+    padding: var(--space-32);
+    border-radius: var(--radius-default);
+    position: relative;
+    box-shadow: var(--shadow-button-strong);
+    background: var(--white);
+  }
+
+  .container:first-of-type {
+    box-shadow: var(--shadow-button-strong),
+      0 0 0 var(--space-12) var(--c6light);
+    color: var(--c10dark);
+  }
+  .container:first-of-type .icon-container {
+    color: var(--c6);
+    border: var(--border-width) solid var(--c6light);
+  }
+  .container:first-of-type .heading {
+    color: var(--c6);
+  }
+
+  .header {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-bottom: var(--space-24);
+  }
+
+  .year {
+    color: var(--c10);
+    font-weight: 700;
+    margin-bottom: var(--space-8);
+    margin-top: var(--space-24);
+  }
+
+  .icon-container {
+    grid-row: 1 / 2;
+    width: 5.8rem;
+    height: 5.8rem;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    color: var(--c4);
+    padding: var(--space-12);
+    border: var(--border-width) solid var(--c2light);
+    border-radius: var(--radius-small);
+  }
+
+  .heading {
+    color: var(--c4);
+    font-size: var(--font-6);
+  }
+
+  .desc {
+    font-size: var(--font-normal);
+    margin-bottom: 0;
+  }
+</style>

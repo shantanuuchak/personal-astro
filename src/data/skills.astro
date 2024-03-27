@@ -1,0 +1,45 @@
+---
+import * as tech from "../utils/technologies.astro";
+
+export interface SkillsType {
+  advanced: tech.Tech[];
+  good: tech.Tech[];
+  basic: tech.Tech[];
+  other: tech.Tech[];
+}
+
+// export const skills: SkillsType = {
+//   advanced: [tech.JS, tech.CSS, tech.HTML],
+//   good: [tech.React, tech.TS, tech.Remix, tech.SiAstro, tech.Nextjs, tech.Git],
+//   basic: [
+//     tech.Nodejs,
+//     tech.Express,
+//     tech.MongoDB,
+//     tech.Mongoose,
+//     tech.Prisma,
+//     tech.Jest,
+//     tech.TestingLibrary,
+//     tech.Cplusplus,
+//     tech.PHP,
+//   ],
+//   other: [
+//     tech.VSCode,
+//     tech.GitHub,
+//     tech.Npm,
+//     tech.Photoshop,
+//     tech.Illustrator,
+//     tech.Vite,
+//     tech.Webpack,
+//     tech.Netlify,
+//     tech.Vercel,
+//     tech.ChatGpt,
+//   ],
+// };
+
+export const skills: SkillsType = {
+  advanced: [tech.React, tech.TS, tech.Remix, tech.SiAstro, tech.Nextjs],
+  good: [],
+  basic: [tech.Nodejs, tech.Express, tech.MongoDB, tech.MySQL],
+  other: [tech.Photoshop],
+};
+---

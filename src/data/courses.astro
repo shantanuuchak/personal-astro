@@ -1,0 +1,139 @@
+---
+import * as tech from "@utils/technologies.astro";
+
+export interface CourseType {
+  year: string;
+  title: string;
+  author: string;
+  tech: tech.Tech[];
+  platform: {
+    name: string;
+    icon: tech.Tech;
+  };
+  length: number;
+  url: string;
+}
+
+export const courses: CourseType[] = [
+  {
+    year: "2023",
+    title: "The Ultimate MySQL Bootcamp: Go from SQL Beginner to Expert",
+    author: "Colt Steele",
+    tech: [tech.MySQL],
+    platform: {
+      name: "Udemy",
+      icon: tech.Udemy,
+    },
+    length: 18,
+    url: "https://www.udemy.com/course/the-ultimate-mysql-bootcamp-go-from-sql-beginner-to-expert/",
+  },
+  {
+    year: "2023",
+    title: "JavaScript Algorithms and Data Structures",
+    author: "Multiple authors",
+    tech: [tech.JS],
+    platform: {
+      name: "FreeCodeCamp",
+      icon: tech.FCC,
+    },
+    length: 80,
+    url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/",
+  },
+  {
+    year: "2023",
+    title: "Remix.js – The Practical Guide",
+    author: "Maximilian Schwarzmüller",
+    tech: [tech.Remix],
+    platform: {
+      name: "Udemy",
+      icon: tech.Udemy,
+    },
+    length: 8.5,
+    url: "https://www.udemy.com/course/remix-course/",
+  },
+  {
+    year: "2023",
+    title: "Understanding TypeScript – 2023 Edition",
+    author: "Maximilian Schwarzmüller",
+    tech: [tech.TS],
+    platform: {
+      name: "Udemy",
+      icon: tech.Udemy,
+    },
+    length: 15,
+    url: "https://www.udemy.com/course/understanding-typescript/",
+  },
+  {
+    year: "2022",
+    title: "React – The Complete Guide (incl. Hooks, React Router, Redux)",
+    author: "Maximilian Schwarzmüller",
+    tech: [tech.React, tech.Router, tech.Redux],
+    platform: {
+      name: "Udemy",
+      icon: tech.Udemy,
+    },
+    length: 49.5,
+    url: "https://www.udemy.com/course/react-the-complete-guide-incl-redux/",
+  },
+  {
+    year: "2022",
+    title: "Node.js, Express, MongoDB & More: The Complete Bootcamp 2023",
+    author: "Jonas Schmedtmann",
+    tech: [tech.Nodejs, tech.Express, tech.MongoDB],
+    platform: {
+      name: "Udemy",
+      icon: tech.Udemy,
+    },
+    length: 42,
+    url: "https://www.udemy.com/course/nodejs-express-mongodb-bootcamp/",
+  },
+  {
+    year: "2022",
+    title: "Advanced CSS and Sass: Flexbox, Grid, Animations and More!",
+    author: "Jonas Schmedtmann",
+    tech: [tech.CSS, tech.Sass],
+    platform: {
+      name: "Udemy",
+      icon: tech.Udemy,
+    },
+    length: 28,
+    url: "https://www.udemy.com/course/advanced-css-and-sass/",
+  },
+  {
+    year: "2022",
+    title: "Git Complete: The definitive, step-by-step guide to Git",
+    author: "Jason Taylor",
+    tech: [tech.Git],
+    platform: {
+      name: "Udemy",
+      icon: tech.Udemy,
+    },
+    length: 6.5,
+    url: "https://www.udemy.com/course/git-complete/",
+  },
+  {
+    year: "2022",
+    title: "The Complete JavaScript Course 2022: From Zero to Expert!",
+    author: "Jonas Schmedtmann",
+    tech: [tech.JS],
+    platform: {
+      name: "Udemy",
+      icon: tech.Udemy,
+    },
+    length: 69,
+    url: "https://www.udemy.com/course/the-complete-javascript-course/",
+  },
+  {
+    year: "2022",
+    title: "Build Responsive Real-World Websites with HTML and CSS",
+    author: "Jonas Schmedtmann",
+    tech: [tech.HTML, tech.CSS],
+    platform: {
+      name: "Udemy",
+      icon: tech.Udemy,
+    },
+    length: 37.5,
+    url: "https://www.udemy.com/course/design-and-develop-a-killer-website-with-html5-and-css3/",
+  },
+];
+---

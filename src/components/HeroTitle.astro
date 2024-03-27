@@ -1,0 +1,211 @@
+---
+import { ArrowFatDown } from "phosphor-react";
+
+interface Props {
+  linkUrl: string;
+  linkText: string;
+  children: any;
+}
+
+const { linkUrl: url, linkText: text } = Astro.props;
+---
+
+<script>
+  const header = document.getElementById("header-container") as HTMLDivElement;
+  const hero = document.querySelector(".js-hero") as HTMLDivElement;
+  const menuInput = document.getElementById("menustate") as HTMLInputElement;
+
+  if (header && hero && menuInput) {
+    let prevScroll = window.scrollY;
+    let headerPos = -120;
+
+    const scrollEventHandler = () => {
+      const currScroll = window.scrollY;
+      const diff = prevScroll - currScroll;
+
+      if (prevScroll < currScroll) headerPos += diff;
+      if (prevScroll > currScroll) headerPos += diff;
+
+      if (headerPos > 0) headerPos = 0;
+      if (headerPos < -120) headerPos = -120;
+
+      header.style.transform = `translateY(${headerPos}%)`;
+
+      prevScroll = currScroll;
+
+      menuInput.checked = false;
+    };
+
+    const makeHeaderSticky = (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      if (entry?.isIntersecting) {
+        headerPos = -120;
+        header.classList.remove("sticky");
+        let scrollTimeout: number;
+        window.addEventListener("scroll", () => {
+          clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(() => {
+            header.classList.remove("sticky");
+          }, 200);
+        });
+        header.style.zIndex = "999";
+        document.removeEventListener("scroll", scrollEventHandler);
+      } else {
+        let scrollTimeout: number;
+        window.addEventListener("scroll", () => {
+          clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(() => {
+            header.classList.add("sticky");
+          }, 200);
+        });
+        document.addEventListener("scroll", scrollEventHandler);
+      }
+    };
+
+    const heroObserver = new IntersectionObserver(makeHeaderSticky, {
+      root: null,
+      threshold: 0,
+      rootMargin: "200px",
+    });
+
+    heroObserver.observe(hero);
+
+    document.addEventListener("scroll", () => {
+      if (window.scrollY < 100) {
+        header.style.transform = `translateY(0)`;
+      }
+    });
+  }
+</script>
+
+<div class="title js-hero">
+  <hgroup class="ignore-grid">
+    <p><slot name="subtitle" /></p>
+    <h1><span>Dawid</span><span><span class="le">Le</span> Hai</span></h1>
+  </hgroup>
+  <p>
+    <slot name="desc" />
+  </p>
+  <a href={url} class="button">
+    <span class="button__text">{text}</span>
+    <span class="button__icon-container">
+      <span class="button__icon-fill">
+        <ArrowFatDown weight="fill" className="button__icon" size="65%" />
+      </span>
+    </span>
+  </a>
+</div>
+
+<style>
+  .title {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    color: var(--c6);
+    position: relative;
+    z-index: 2;
+  }
+
+  .title h1 {
+    position: relative;
+    margin-bottom: var(--space-8);
+    font-size: 18.3rem;
+    font-family: "Anton", "Poppins", sans-serif;
+    text-transform: uppercase;
+    display: grid;
+    justify-items: end;
+    line-height: 1;
+    grid-template-columns: 1fr;
+  }
+
+  .title h1 > span:last-child {
+    font-size: 1.53ex;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.15ex;
+    color: var(--c3);
+  }
+
+  .title hgroup p {
+    text-transform: uppercase;
+    font-size: var(--font-small);
+    font-weight: 600;
+    letter-spacing: 0.4rem;
+    color: var(--c4);
+    margin-bottom: var(--space-48);
+  }
+
+  .title > p {
+    font-size: var(--font-6);
+    max-width: 29ch;
+    text-align: right;
+    margin-bottom: var(--space-48);
+    margin-top: var(--space-32);
+    color: var(--c4);
+    font-weight: 500;
+  }
+
+  .button {
+    background-color: var(--white);
+    font-size: var(--font-base);
+  }
+
+  @media only screen and (max-width: 85.5em /* 1368px */) {
+    .title h1 {
+      font-size: 15rem;
+    }
+    .title > p {
+      font-size: var(--font-large);
+    }
+  }
+
+  @media only screen and (max-width: 71em /* 1136px */) {
+    .title h1 {
+      font-size: 13rem;
+    }
+  }
+
+  @media only screen and (max-width: 56em /* 896px */) {
+    .title {
+      grid-column: 1 / -1;
+      align-items: center;
+    }
+
+    .title h1 {
+      display: flex;
+      gap: var(--space-12);
+    }
+
+    .title h1 > span:last-child {
+      font-size: 13rem;
+    }
+
+    .title hgroup p {
+      margin-bottom: var(--space-24);
+    }
+
+    .title > p {
+      text-align: center;
+      margin-top: var(--space-12);
+      margin-bottom: var(--space-24);
+    }
+  }
+
+  @media only screen and (max-width: 32.25em /* 516px */) {
+    .title h1 {
+      display: grid;
+      justify-items: center;
+      font-size: 16.1rem;
+    }
+
+    .title h1 > span:last-child {
+      font-size: 1.53ex;
+    }
+  }
+
+  @media only screen and (max-width: 20em /* 320px */) {
+    .title h1 {
+      font-size: 13rem;
+    }
+  }
+</style>

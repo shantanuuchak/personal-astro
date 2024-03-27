@@ -1,0 +1,182 @@
+---
+import { List, Translate, X } from "phosphor-react";
+
+import type { LanguageSelectionType, Link } from "../utils/types";
+import { getSite, getSiteName, getLanguageUrls } from "../utils/utils.astro";
+import Navigation from "../components/Navigation.astro";
+
+interface Props {
+  language: LanguageSelectionType;
+  links?: Link[];
+  cta?: Link;
+}
+
+const { language, links } = Astro.props;
+
+const isEn = language === "en";
+const langCode = isEn ? "pl" : "en";
+const url = getLanguageUrls();
+
+let site = getSite();
+if (!isEn) site = new URL("pl", getSite());
+const siteName = getSiteName();
+---
+
+<script>
+  const menuButton = document.querySelector(
+    ".js-menu-button"
+  ) as HTMLLabelElement;
+  const menuState = document.getElementById("menustate") as HTMLInputElement;
+
+  if (menuButton && menuState) {
+    menuButton.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") menuState.checked = !menuState.checked;
+    });
+  }
+</script>
+
+<div class="full-bleed layout-grid header-bg" id="header-container">
+  <input aria-hidden="true" type="checkbox" id="menustate" />
+  <header class="header mid-col mobile">
+    <div class="left">
+      <a href={site} class="logo-link" title="dawidlehai.dev" tabindex="1">
+        <div class="logo"><span>Le</span></div>
+        <span>{siteName}</span>
+      </a>
+    </div>
+
+    {links && <Navigation links={links} />}
+
+    <label for="menustate" class="menu-button js-menu-button" tabindex="3">
+      <List size="100%" weight="bold" className="menu-button__open" />
+      <X size="100%" weight="bold" className="menu-button__close" />
+    </label>
+  </header>
+</div>
+
+<style is:global>
+  .sticky {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: linear-gradient(
+      to bottom,
+      var(--white),
+      rgb(var(--whiteRGB) / 0.9)
+    );
+    backdrop-filter: blur(4px);
+    box-shadow: 0 0 2rem rgb(var(--blackRGB) / 0.1);
+    margin-bottom: calc(var(--side-padding) * 4 / 3);
+    transform: translateY(-120%);
+  }
+
+  .sticky .header {
+    padding: calc(var(--side-padding) / 3) var(--side-padding);
+  }
+
+  #menustate,
+  header.header :is(.menu-button, .menu-button__close) {
+    display: none;
+  }
+
+  #menustate:checked ~ header.header :is(.menu-button__close) {
+    display: flex;
+  }
+
+  #menustate:checked ~ header.header :is(.top-nav) {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  #menustate:checked ~ header.header .menu-button__open {
+    display: none;
+  }
+
+  .menu-button {
+    height: 4rem;
+    align-self: center;
+    color: var(--c8dark);
+    cursor: pointer;
+  }
+
+  header.header {
+    --gap: var(--space-24);
+    gap: var(--gap);
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: var(--side-padding);
+    position: relative;
+    z-index: 999;
+  }
+
+  header.header a:where(:link, :visited) {
+    color: var(--c2dark);
+    font-weight: var(--weight);
+  }
+
+  .header .left {
+    display: flex;
+    gap: var(--space-32);
+  }
+
+  .header .logo {
+    background: var(--c3);
+    width: 4.5rem;
+    font-size: 2.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    color: #fff;
+    font-family: "Anton", "Poppins", sans-serif;
+    text-transform: uppercase;
+    border-radius: var(--radius-xs);
+    letter-spacing: 0.05ex;
+    aspect-ratio: 1 / 1;
+  }
+
+  .header .logo-link {
+    font-weight: 700;
+    color: var(--c3);
+    justify-self: flex-start;
+    font-size: 2rem;
+    gap: var(--space-8);
+    display: flex;
+    align-items: stretch;
+  }
+
+  .header .logo-link > span {
+    display: flex;
+    align-items: center;
+  }
+
+  .header .lang-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--gap) / 4);
+    transition: transform 0.2s;
+  }
+
+  @media only screen and (max-width: 56em /* 896px */) {
+    header.header.mobile :is(.menu-button, .menu-button__open) {
+      display: flex;
+    }
+
+    .sticky .header {
+      padding: calc(var(--side-padding) / 1.5) var(--side-padding);
+    }
+
+    .sticky {
+      margin-bottom: calc(var(--side-padding) * 4 / 1.5);
+    }
+  }
+
+  @media only screen and (max-width: 20em /* 320px */) {
+    .header .logo-link > span {
+      display: none;
+    }
+  }
+</style>

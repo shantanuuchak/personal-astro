@@ -1,0 +1,216 @@
+---
+import type { Link } from "@utils/types";
+import { ArrowCircleRight } from "phosphor-react";
+
+interface Props {
+  link: Link;
+}
+
+const { link } = Astro.props;
+---
+
+<div class="music-section mid-col">
+  <div class="header-container">
+    <div class="header-fill">
+      <div class="header">
+        <div class="icon-container">
+          <link.icon size="100%" weight="duotone" />
+        </div>
+        <p class="heading">
+          <span>04</span><span>{link.heading}</span>
+        </p>
+        <h2 class="subheading">{link.subheading}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="filler">
+    <slot />
+
+    <div class="gto-container">
+      <a href="https://soundcloud.com/saitamason" hreflang="en" class="goto">
+        SoundCloud
+        <ArrowCircleRight size="100%" className="goto__icon" weight="fill" />
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .music-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 var(--side-padding);
+    gap: var(--space-32);
+  }
+
+  .header-container {
+    position: relative;
+    padding: var(--space-96);
+    position: relative;
+  }
+
+  .header {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .icon-container {
+    height: var(--space-80);
+    aspect-ratio: 1/1;
+    color: var(--white);
+    background: var(--c3);
+    line-height: 1;
+    padding: var(--space-12);
+    border-radius: var(--radius-s);
+    grid-column: 3 / 4;
+    justify-self: end;
+    position: relative;
+  }
+
+  .heading {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--c3mediumer);
+  }
+
+  .heading span:first-child {
+    display: block;
+    font-size: var(--font-5);
+    color: var(--c3mediumer);
+    font-weight: 700;
+  }
+
+  .heading span:last-child {
+    letter-spacing: 0.8rem;
+  }
+
+  .subheading {
+    color: var(--c3);
+    font-size: var(--font-3);
+    grid-column: 1 / -1;
+    margin-top: var(--space-24);
+    text-align: right;
+  }
+
+  .filler {
+    border-radius: var(--radius-default);
+    padding: var(--space-96);
+    padding-bottom: var(--space-64);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    color: var(--c3dark);
+  }
+
+  .gto-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .goto:where(:link, :visited) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    font-size: var(--font-base);
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--c3);
+    justify-self: flex-end;
+  }
+
+  @media only screen and (max-width: 85.5em /* 1368px */) {
+    .music-section {
+      gap: 0;
+    }
+  }
+
+  @media only screen and (max-width: 78.5em /* 1256px */) {
+    .header-container {
+      padding: var(--space-32) var(--space-64);
+    }
+
+    .filler {
+      padding: var(--space-32) var(--space-64);
+    }
+
+    .subheading {
+      font-size: var(--font-4);
+    }
+  }
+
+  @media only screen and (max-width: 71em /* 1136px */) {
+    .header-container {
+      padding: var(--space-32);
+      max-width: 50ch;
+    }
+
+    .filler {
+      padding: var(--space-32);
+    }
+
+    .heading span:last-child {
+      font-size: var(--font-normal);
+    }
+  }
+
+  @media only screen and (max-width: 62.5em /* 1000px */) {
+    .header-container {
+      padding: var(--space-8) var(--space-32);
+      padding-top: var(--space-48);
+    }
+
+    .filler {
+      padding: var(--space-8) var(--space-32);
+      padding-top: var(--space-48);
+    }
+  }
+
+  @media only screen and (max-width: 56em /* 896px */) {
+    .music-section {
+      grid-template-columns: 3fr 4fr;
+    }
+  }
+
+  @media only screen and (max-width: 45.5em /* 728px */) {
+    .music-section {
+      grid-template-columns: 1fr;
+      max-width: 69rem;
+      justify-self: center;
+    }
+
+    .header-container {
+      padding: var(--space-24) var(--space-32);
+      padding-top: var(--space-48);
+      max-width: 100%;
+    }
+
+    .filler {
+      padding: var(--space-8) var(--space-32);
+      justify-self: center;
+    }
+
+    .subheading {
+      text-align: left;
+      justify-self: start;
+      max-width: 100%;
+    }
+  }
+
+  @media only screen and (max-width: 32.25em /* 516px */) {
+    .header-container {
+      padding: 0;
+      padding-bottom: var(--space-24);
+      padding-top: var(--space-80);
+    }
+
+    .filler {
+      padding: 0;
+    }
+  }
+</style>

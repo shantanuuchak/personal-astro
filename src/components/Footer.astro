@@ -1,0 +1,52 @@
+---
+import * as tech from "@utils/technologies.astro";
+import TechIcon from "./projects/TechIcon.astro";
+---
+
+<footer class="full-bleed layout-grid">
+  <div class="mid-col container">
+    <p>Created with</p>
+    <ul>
+      <TechIcon tech={tech.SiAstro} size="large" />
+      <TechIcon tech={tech.TS} size="large" />
+      <TechIcon tech={tech.CSS} size="large" />
+      <TechIcon tech={tech.HTML} size="large" />
+    </ul>
+  </div>
+</footer>
+
+<style>
+  footer {
+    color: var(--c11dark);
+    background: linear-gradient(to top, var(--white), var(--c11));
+  }
+
+  .container {
+    padding: 0 var(--side-padding);
+    padding-top: var(--space-256);
+    padding-bottom: calc(var(--side-padding) * 2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-12);
+  }
+
+  footer p {
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-8);
+  }
+
+  @media only screen and (max-width: 78.5em /* 1256px */) {
+    .container {
+      padding-top: var(--space-128);
+    }
+  }
+</style>

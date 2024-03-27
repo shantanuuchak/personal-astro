@@ -1,0 +1,144 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { ArrowCircleRight } from "phosphor-react";
+
+interface Props {
+  item: CollectionEntry<"research">;
+  mark?: boolean;
+}
+
+const {
+  item,
+  item: {
+    id,
+    data: { years, title, role, link },
+  },
+  mark = false,
+} = Astro.props;
+
+const { Content } = await item.render();
+
+const lang = id.split("/")[0];
+---
+
+<li class={`item ${mark ? "marked" : ""}`}>
+  <p class="years">
+    <time class="from" datetime={years.from}>{years.from}</time>
+    {
+      years.from !== years.to && (
+        <>
+          –
+          <time class="to" datetime={years.to}>
+            {years.to}
+          </time>
+        </>
+      )
+    }
+  </p>
+
+  <hgroup class="heading">
+    <p class="role">{role}</p>
+
+    <h3 class="title" {...(title.lang !== lang && {lang: title.lang})}>
+      {title.content}
+    </h3>
+  </hgroup>
+
+  <div class="description">
+    <Content class="test" />
+  </div>
+
+  {
+    link && (
+      <div class="link">
+        <a
+          class="goto"
+          href={link.url}
+          {...(link.hreflang !== lang && { lang: link.hreflang })}>
+          {link.text}
+          <ArrowCircleRight size="3.6ex" weight="fill" className="goto__icon" />
+        </a>
+      </div>
+    )
+  }
+</li>
+
+<style>
+  .item.marked {
+    box-shadow: var(--shadow-button-strong),
+      0 0 0 var(--space-12) var(--c6light);
+    color: var(--c10dark);
+  }
+  .item.marked .role {
+    color: var(--c6);
+  }
+  .item.marked .goto:where(:link, :visited) {
+    color: var(--c6);
+  }
+
+  .item {
+    padding: var(--space-32);
+    padding-bottom: var(--space-8);
+    background-color: var(--white);
+    position: relative;
+    border-radius: var(--radius-small);
+    color: var(--c2dark);
+    box-shadow: var(--shadow-button-strong);
+  }
+
+  .years {
+    margin-bottom: var(--space-16);
+    font-weight: 700;
+    display: flex;
+    gap: var(--space-2);
+    color: var(--c10light);
+  }
+
+  .role {
+    font-weight: 700;
+    margin-bottom: var(--space-8);
+    font-size: var(--font-base);
+    line-height: var(--line-snugish);
+    color: var(--c4);
+  }
+
+  .title {
+    font-size: var(--font-normal);
+    font-weight: 400;
+    line-height: var(--line-normal);
+    letter-spacing: 0;
+    margin-bottom: var(--space-24);
+    color: var(--c10);
+  }
+
+  .description {
+    font-size: var(--font-small);
+    line-height: 1.7;
+  }
+
+  .link {
+    display: grid;
+    padding-bottom: var(--space-24);
+  }
+
+  .goto:where(:link, :visited) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    font-size: var(--font-small);
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--c4);
+    justify-self: flex-end;
+  }
+
+  @media only screen and (max-width: 25em /* 400px */) {
+    .role {
+      font-size: var(--font-large);
+    }
+
+    .description {
+      font-size: var(--font-normal);
+    }
+  }
+</style>

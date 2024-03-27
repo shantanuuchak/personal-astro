@@ -1,0 +1,32 @@
+---
+export const getSite = () => {
+  const { site } = Astro;
+  if (!site) throw new Error("Please define site property in astro.config.");
+  return site;
+};
+
+export const getLanguageUrls = () => {
+  const site = getSite();
+  const polishUrl = new URL("pl/", site);
+  return {
+    en: site,
+    pl: polishUrl,
+  };
+};
+
+export const getSiteName = () => {
+  const site = String(getSite());
+  const siteName = site.slice(site.indexOf("//") + 2, -1);
+  return siteName;
+};
+
+export const getAge = () => {
+  const birthDate = +new Date(import.meta.env.BIRTH_DATE);
+  const currentDate = +new Date();
+
+  const ageInMilliseconds = currentDate - birthDate;
+  const ageInYears = Math.trunc(ageInMilliseconds / 1000 / 60 / 60 / 24 / 365);
+
+  return ageInYears;
+};
+---

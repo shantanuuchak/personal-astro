@@ -1,0 +1,345 @@
+---
+import type { LanguageSelectionType } from "@utils/types";
+import type { CollectionEntry } from "astro:content";
+import { Brain, Database, DesktopTower, Star, Swap } from "phosphor-react";
+
+interface Props {
+  lang: LanguageSelectionType;
+  item: CollectionEntry<"education">;
+}
+
+const {
+  lang,
+  item,
+  item: {
+    data: {
+      gpa,
+      years: { from, to },
+      title: { content: title, lang: titleLang },
+      school: {
+        name: school,
+        lang: schoolLang,
+        logo: { filename: logo, aspectRatio },
+      },
+    },
+    slug,
+  },
+} = Astro.props;
+
+const { Content } = await item.render();
+
+const isTitleDiffLang = titleLang !== lang;
+const isSchoolDiffLang = schoolLang !== lang;
+---
+
+<li class="item ignore-grid">
+  <div class="item__logo-container">
+    <img
+      src={`/img/logos/${logo}`}
+      alt={school}
+      {...(isSchoolDiffLang && {lang: schoolLang})}
+      class="item__logo"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <div class="item__near-logo">
+    <p class="item__years">
+      <time datetime={from} class="item__year--from">
+        {from}
+      </time>
+      {
+        from !== to && (
+          <>
+            –
+            <time datetime={to} class="item__year--to">
+              {to}
+            </time>
+          </>
+        )
+      }
+    </p>
+
+    <p class="item__school">
+      {school}
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="header">
+      <h3 {...(isTitleDiffLang && {lang: titleLang})} class="item__heading">
+        {title}
+      </h3>
+      <div class="icon-container">
+        {
+          slug === "ukw" && (
+            <Brain weight="duotone" size="100%" className="icon" />
+          )
+        }
+        {
+          slug === "inn" && (
+            <Swap weight="duotone" size="100%" className="icon" />
+          )
+        }
+        {
+          slug === "utp" && (
+            <Database weight="duotone" size="100%" className="icon" />
+          )
+        }
+        {
+          slug === "zse" && (
+            <DesktopTower weight="duotone" size="100%" className="icon" />
+          )
+        }
+      </div>
+    </div>
+
+    <div class="item__description">
+      <div class="gpa-container">
+        <Star weight="duotone" size="100%" className="gpa-icon" />
+        <span>GPA:</span>
+        <span>
+          {lang === "en" && gpa}
+          {lang === "pl" && String(gpa).replace(".", ",")}
+        </span>
+      </div>
+      <Content />
+    </div>
+  </div>
+</li>
+
+<style define:vars={{ aspectRatio }}>
+  .item:last-of-type .item__heading {
+    color: var(--c6);
+  }
+  .item:last-of-type .card {
+    box-shadow: var(--shadow-button-strong),
+      0 0 0 var(--space-12) var(--c6light);
+  }
+  .item:last-of-type .icon-container {
+    color: var(--c6);
+    border-color: var(--c6light);
+  }
+  .item:last-of-type .item__description {
+    color: var(--c10dark);
+  }
+  .item:last-of-type .item__years {
+    color: var(--c6dark);
+  }
+
+  .item__logo-container {
+    justify-self: center;
+    align-self: end;
+    grid-row: 1 / 2;
+    width: 10rem;
+    padding: var(--space-16);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1000px;
+  }
+  li:nth-of-type(1) .item__logo-container {
+    width: 9.5rem;
+  }
+  li:nth-of-type(2) .item__logo-container {
+    width: 15rem;
+  }
+  li:nth-of-type(2) .item__logo {
+    aspect-ratio: var(--aspectRatio);
+  }
+
+  .item__logo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
+  .item__near-logo {
+    grid-row: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: 20rem;
+    color: var(--c10);
+  }
+
+  .item__near-logo::before {
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-right: var(--border-width) solid var(--c2medium);
+    z-index: -1;
+  }
+
+  .item__school {
+    margin: 0;
+    margin-top: -0.5rem;
+    max-width: 27ch;
+    text-align: center;
+    background-color: var(--c2light);
+    font-weight: 500;
+  }
+
+  .item__years {
+    margin: 0;
+    margin-top: var(--space-24);
+    display: flex;
+    justify-content: center;
+    gap: 0.1ex;
+    font-size: var(--font-6);
+    font-weight: 700;
+    background-color: var(--c2light);
+    color: var(--c4);
+  }
+
+  .header {
+    padding: var(--space-32);
+    padding-bottom: var(--space-16);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .item__heading {
+    font-size: var(--font-6);
+    line-height: var(--line-very-tight);
+    letter-spacing: var(--letter-spacing-4);
+    color: var(--c4);
+    max-width: 11ch;
+  }
+
+  .icon-container {
+    padding: var(--space-12);
+    color: var(--c4);
+    border: var(--border-width) solid var(--c2light);
+    border-radius: var(--radius-small);
+    display: flex;
+    align-self: flex-start;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon {
+    width: 3rem;
+    aspect-ratio: 1 / 1;
+  }
+
+  .gpa-container {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    margin-bottom: var(--space-16);
+    font-size: var(--font-base);
+    font-weight: 600;
+    color: var(--c10);
+  }
+  .gpa-container > span:last-child {
+    color: var(--c6);
+    font-weight: 700;
+  }
+
+  .gpa-icon {
+    width: 2rem;
+    aspect-ratio: 1 / 1;
+  }
+
+  .item__description {
+    padding: 0 var(--space-32);
+    font-size: var(--font-small);
+    color: var(--c2dark);
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: var(--radius-default);
+    box-shadow: var(--shadow-button-strong);
+  }
+
+  @media only screen and (max-width: 78.5em /* 1256px */) {
+    li:is(:nth-of-type(3), :nth-of-type(4)) .item__logo-container {
+      grid-row: 4 / 5;
+    }
+
+    li:is(:nth-of-type(3), :nth-of-type(4)) .item__near-logo {
+      grid-row: 5 / 6;
+    }
+
+    .card {
+      margin-bottom: var(--space-48);
+    }
+
+    .item__near-logo {
+      height: 16rem;
+    }
+  }
+
+  @media only screen and (max-width: 32.25em /* 516px */) {
+    li:is(:nth-of-type(3), :nth-of-type(4)) .item__logo-container {
+      grid-row: auto;
+    }
+
+    li:is(:nth-of-type(3), :nth-of-type(4)) .item__near-logo {
+      grid-row: auto;
+    }
+
+    li.item {
+      display: grid;
+      grid-template-columns: min-content 1fr;
+      gap: var(--space-24);
+    }
+
+    .item__logo-container {
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+      padding: 0;
+      align-self: end;
+      width: 8rem;
+      padding-bottom: var(--space-8);
+    }
+
+    li.item:nth-of-type(1) .item__logo-container {
+      width: 7rem;
+    }
+
+    li.item:nth-of-type(2) .item__logo-container {
+      width: 12rem;
+    }
+
+    .item__near-logo {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+      height: 100%;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .item__near-logo::before {
+      display: none;
+    }
+
+    .item__school {
+      margin: 0;
+      text-align: left;
+      max-width: 100%;
+    }
+
+    .item__years {
+      margin: 0;
+    }
+
+    .card {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media only screen and (max-width: 25em /* 400px */) {
+    .item__description {
+      font-size: var(--font-normal);
+    }
+  }
+</style>

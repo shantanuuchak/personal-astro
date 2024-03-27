@@ -1,0 +1,117 @@
+---
+import { getCollection } from "astro:content";
+
+import type { LanguageSelectionType } from "@utils/types";
+import ResearchItem from "./ResearchItem.astro";
+import { FileSearch } from "phosphor-react";
+
+interface Props {
+  lang: LanguageSelectionType;
+}
+
+const { lang } = Astro.props;
+
+const researchList = await getCollection("research", ({ id }) => {
+  return id.startsWith(`${lang}/`);
+});
+---
+
+<section class="mid-col">
+  <div class="header">
+    <div class="icon-container">
+      <FileSearch weight="duotone" size="100%" className="icon" />
+    </div>
+    <h3>
+      {lang === "en" && "Selected research activities"}
+      {lang === "pl" && "Wybrana działalność naukowa"}
+    </h3>
+  </div>
+
+  <ul class="list">
+    <ResearchItem item={researchList[0]!} mark={true} />
+    {
+      researchList.map((item, index) => {
+        if (index > 0) return <ResearchItem item={item} />;
+      })
+    }
+  </ul>
+</section>
+
+<style>
+  section {
+    margin-top: var(--space-192);
+    display: grid;
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 var(--side-padding);
+    gap: var(--space-32);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    color: var(--c4);
+    margin-bottom: var(--space-80);
+    gap: var(--space-24);
+    padding: 0 var(--side-padding);
+  }
+
+  h3 {
+    font-size: var(--font-4);
+    color: var(--c4);
+  }
+
+  .icon-container {
+    flex-shrink: 0;
+    padding: var(--space-12);
+    width: 7rem;
+    line-height: 1;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-small);
+    border: var(--border-width) solid var(--c2medium);
+  }
+
+  @media only screen and (max-width: 78.5em /* 1256px */) {
+    .list {
+      gap: var(--space-24);
+    }
+
+    section {
+      margin-top: var(--space-144);
+    }
+  }
+
+  @media only screen and (max-width: 71em /* 1136px */) {
+    .list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-32);
+    }
+  }
+
+  @media only screen and (max-width: 62.5em /* 1000px */) {
+    section {
+      margin-top: var(--space-96);
+    }
+  }
+
+  @media only screen and (max-width: 38em /* 608px */) {
+    .list {
+      max-width: 60rem;
+      justify-self: center;
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 32.25em /* 516px */) {
+    h3 {
+      font-size: var(--font-5);
+    }
+
+    .header {
+      margin-bottom: var(--space-48);
+    }
+  }
+</style>

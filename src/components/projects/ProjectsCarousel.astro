@@ -1,0 +1,220 @@
+---
+import type { LanguageSelectionType } from "../../utils/types";
+import type { Project } from "../../data/projects";
+import SingleProject from "./SingleProject.astro";
+import { ArrowCircleRight, ArrowRight } from "phosphor-react";
+
+interface Props {
+  projects: Project[];
+  language: LanguageSelectionType;
+}
+
+const { projects, language: lang } = Astro.props;
+const isEn = lang === "en";
+---
+
+<script>
+  const list = document.getElementById("projects-list") as HTMLDivElement;
+  const instructions = document.querySelector(
+    ".instructions"
+  ) as HTMLParagraphElement;
+
+  if (list && instructions) {
+    list.style.cursor = "grab";
+
+    let pos = {
+      left: 0,
+      x: 0,
+      dx: 0,
+    };
+
+    const mouseMoveHandler = (event: MouseEvent) => {
+      pos.dx = event.clientX - pos.x;
+      list.scrollLeft = pos.left - pos.dx;
+
+      // list.style.scrollSnapType = "none";
+      // list.style.scrollBehavior = "auto";
+    };
+
+    const mouseUpHandler = () => {
+      document.removeEventListener("mousemove", mouseMoveHandler);
+      document.removeEventListener("mouseup", mouseUpHandler);
+
+      list.style.cursor = "grab";
+      list.style.removeProperty("user-select");
+      // list.style.scrollSnapType = "x mandatory";
+      // list.style.scrollBehavior = "smooth";
+
+      // if (pos.dx > 0) list.scrollLeft -= 150;
+      // if (pos.dx < 0) list.scrollLeft += 150;
+    };
+
+    list.addEventListener("mousedown", (event) => {
+      list.style.cursor = "grabbing";
+      list.style.userSelect = "none";
+
+      pos = {
+        left: list.scrollLeft,
+        x: event.clientX,
+        dx: 0,
+      };
+
+      document.addEventListener("mousemove", mouseMoveHandler);
+      document.addEventListener("mouseup", mouseUpHandler);
+    });
+
+    list.addEventListener("scroll", () => {
+      if (list.scrollWidth - list.clientWidth - 150 < list.scrollLeft)
+        instructions.classList.add("instructions--hidden");
+    });
+  }
+</script>
+
+<div class="projects-section full-bleed">
+  <p class="instructions">
+    {isEn && "Swipe to see more"}
+    {!isEn && "Przesuń, aby zobaczyć więcej"}
+    <ArrowRight size="100%" weight="regular" className="instructions__icon" />
+  </p>
+  <ul class="list-container" id="projects-list">
+    {
+      projects.map((project, index) => {
+        if (index < 2) return;
+        return <SingleProject project={project} lang={lang} />;
+      })
+    }
+    <li class="end">
+      <article>
+        <hgroup>
+          <p><slot name="subheading" /></p>
+          <h4>
+            <slot name="heading" />
+          </h4>
+        </hgroup>
+        <p>
+          <slot name="info" />
+        </p>
+        <a href="https://github.com/dawidlehai/" hreflang="en" class="goto">
+          GitHub
+          <ArrowCircleRight size="100%" className="goto__icon" weight="fill" />
+        </a>
+      </article>
+    </li>
+  </ul>
+  <div class="bar-cover"></div>
+</div>
+
+<style>
+  .instructions {
+    display: flex;
+    gap: var(--space-8);
+    align-items: center;
+    color: var(--c1darker);
+    font-size: var(--font-small);
+    padding: 0 var(--side-padding);
+    justify-content: flex-end;
+    opacity: 1;
+    transition: opacity 1s;
+    width: 100vw;
+    max-width: 100%;
+  }
+  .instructions--hidden {
+    opacity: 0;
+  }
+
+  .instructions__icon {
+    width: 2rem;
+    aspect-ratio: 1 / 1;
+  }
+
+  .projects-section {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+  }
+
+  .list-container {
+    display: flex;
+    /* scroll-snap-type: x mandatory; */
+    /* scroll-behavior: smooth; */
+    overflow-x: auto;
+    scroll-padding: 0 var(--side-padding);
+    padding-bottom: var(--space-24);
+    overscroll-behavior-x: contain;
+    gap: var(--space-48);
+  }
+
+  .bar-cover {
+    width: 100%;
+    position: absolute;
+    height: 25px;
+    background: var(--c6light);
+    bottom: 0;
+  }
+
+  .end {
+    flex: 0 0 auto;
+    max-width: 45rem;
+    color: var(--c11dark);
+    align-self: center;
+    padding-right: var(--side-padding);
+  }
+  .end article {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .end hgroup {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .end hgroup p {
+    font-size: var(--font-normal);
+    color: var(--c8dark);
+    font-weight: 600;
+    margin-bottom: var(--space-24);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-very-loose);
+  }
+
+  .end h4 {
+    font-size: var(--font-4);
+    line-height: var(--line-very-tight);
+    letter-spacing: var(--letter-spacing-2);
+    margin-bottom: var(--space-32);
+  }
+  .end h4 span:first-of-type {
+    font-size: var(--font-base);
+    display: flex;
+    flex-direction: column;
+    line-height: var(--line-very-tight);
+    letter-spacing: var(--letter-spacing-2);
+    margin-bottom: var(--space-32);
+  }
+  .end p {
+    color: var(--c11darker);
+  }
+  .goto:where(:link, :visited) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    font-size: var(--font-base);
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--c8dark);
+    justify-self: flex-end;
+  }
+
+  @media only screen and (max-width: 78.5em /* 1256px */) {
+    .list-container {
+      gap: var(--space-24);
+    }
+  }
+
+  @media only screen and (max-width: 20em /* 320px */) {
+    .end {
+      max-width: 35rem;
+    }
+  }
+</style>

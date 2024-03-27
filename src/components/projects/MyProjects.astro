@@ -1,0 +1,54 @@
+---
+import type { LanguageSelectionType } from "../../utils/types";
+import type { Project } from "../../data/projects";
+import SingleProject from "./SingleProject.astro";
+
+interface Props {
+  projects: Project[];
+  language: LanguageSelectionType;
+}
+
+const { projects, language: lang } = Astro.props;
+---
+
+<div class="projects-section mid-col">
+  <ul class="list-container ignore-grid">
+    {
+      projects.map((project, index) => {
+        if (index > 1) return;
+        return <SingleProject project={project} lang={lang} />;
+      })
+    }
+  </ul>
+</div>
+
+<style>
+  .projects-section {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    padding: 0 var(--side-padding);
+    padding-top: var(--space-32);
+    gap: var(--space-48);
+    row-gap: var(--space-128);
+  }
+
+  @media only screen and (max-width: 71em /* 1136px */) {
+    .projects-section {
+      gap: var(--space-32);
+    }
+  }
+
+  @media only screen and (max-width: 45.5em /* 728px */) {
+    .projects-section {
+      grid-template-columns: repeat(6, 1fr);
+      max-width: 90rem;
+      justify-self: center;
+    }
+  }
+
+  @media only screen and (max-width: 25em /* 400px */) {
+    .projects-section {
+      padding-top: 0;
+    }
+  }
+</style>

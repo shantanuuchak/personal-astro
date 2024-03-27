@@ -1,0 +1,62 @@
+---
+import { skills } from "../../data/skills.astro";
+import Skill from "./Skill.astro";
+---
+
+<div class="list-container">
+  <ol class="list">
+    {skills.advanced.map((item) => <Skill tech={item} type="advanced" />)}
+    {skills.good.map((item) => <Skill tech={item} type="good" />)}
+    {skills.basic.map((item) => <Skill tech={item} type="basic" />)}
+    {skills.other.map((item) => <Skill tech={item} type="other" />)}
+  </ol>
+</div>
+
+<style>
+  .list-container {
+    align-self: start;
+    padding: var(--space-96);
+    padding-top: 0;
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: var(--space-8);
+  }
+
+  @media only screen and (max-width: 78.5em /* 1256px */) {
+    .list-container {
+      padding: var(--space-64);
+      padding-top: 0;
+    }
+  }
+
+  @media only screen and (max-width: 71em /* 1136px */) {
+    .list-container {
+      padding: var(--space-32);
+      padding-top: 0;
+    }
+  }
+
+  @media only screen and (max-width: 32.25em /* 516px */) {
+    .list-container {
+      padding: 0;
+      padding-bottom: var(--space-32);
+      padding-top: var(--space-8);
+    }
+  }
+
+  @media only screen and (max-width: 25em /* 400px */) {
+    .list {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media only screen and (max-width: 22em /* 352px */) {
+    .list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,171 @@
+---
+import type { Caption } from "../utils/types";
+import FigurePicture from "./utils/FigurePicture.astro";
+
+interface Props {
+  captions: Caption[];
+}
+
+const { captions } = Astro.props;
+---
+
+<div class="figures">
+  {
+    captions.map((caption, index) => (
+      <figure class="ignore-grid">
+        <figcaption>
+          <p>{caption.subtitle}</p>
+          <h2>{caption.title}</h2>
+        </figcaption>
+        <div class="figure-image-container">
+          <div class="figure-image">
+            <FigurePicture index={index} alt={caption.img.alt} />
+          </div>
+        </div>
+      </figure>
+    ))
+  }
+</div>
+
+<style>
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: min-content 1fr;
+    gap: var(--space-32);
+    align-items: start;
+  }
+
+  figure:nth-child(1) :is(.figure-image-container, .filler) {
+    grid-column: 1 / 2;
+    background: var(--c5);
+  }
+  figure:nth-child(2) :is(.figure-image-container, .filler) {
+    grid-column: 2 / 3;
+    background: var(--c4);
+  }
+  figure:nth-child(3) :is(.figure-image-container, .filler) {
+    grid-column: 3 / 4;
+    background: var(--c6);
+  }
+  figure:nth-child(4) :is(.figure-image-container, .filler) {
+    grid-column: 4 / 5;
+    background: var(--c3);
+  }
+
+  figcaption {
+    align-self: end;
+  }
+
+  figcaption h2 {
+    font-size: var(--font-5);
+    font-weight: 700;
+    color: var(--c3dark);
+    letter-spacing: var(--letter-spacing-3);
+    line-height: var(--line-tight);
+    display: grid;
+  }
+
+  figcaption p {
+    font-size: var(--font-small);
+    text-transform: uppercase;
+    color: var(--c3dark);
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .figure-image-container {
+    grid-row: 2 / 3;
+    width: 100%;
+    height: 59rem;
+    display: grid;
+    align-self: stretch;
+    border-radius: var(--radius-default);
+    overflow: hidden;
+  }
+
+  .figure-image {
+    width: 100%;
+    color: transparent;
+    position: relative;
+  }
+
+  @media only screen and (max-width: 85.5em /* 1368px */) {
+    .figure-image-container {
+      height: 50rem;
+    }
+  }
+
+  @media only screen and (max-width: 78.5em /* 1256px */) {
+    figcaption h2 {
+      font-size: var(--font-6);
+      max-width: 11ch;
+    }
+
+    .figures {
+      gap: var(--space-16);
+    }
+
+    .figure-image-container {
+      height: 53rem;
+    }
+  }
+
+  @media only screen and (max-width: 71em /* 1136px */) {
+    .figure-image-container {
+      height: 48.5rem;
+    }
+  }
+
+  @media only screen and (max-width: 56em /* 896px */) {
+    .figures {
+      grid-column: 1 / -1;
+      margin-top: var(--space-64);
+      text-align: center;
+    }
+
+    figcaption {
+      display: grid;
+      place-items: center;
+    }
+
+    .figure-image-container {
+      height: 100%;
+    }
+  }
+
+  @media only screen and (max-width: 32.25em /* 516px */) {
+    .figures {
+      grid-template-columns: 1fr 1fr;
+      max-width: 45rem;
+      justify-self: center;
+    }
+
+    .figure-image-container {
+      height: 50rem;
+    }
+
+    figure:nth-child(3) figcaption,
+    figure:nth-child(4) figcaption {
+      margin-top: var(--space-32);
+    }
+
+    figure:nth-child(3) .figure-image-container,
+    figure:nth-child(4) .figure-image-container {
+      grid-row: 4 / 5;
+    }
+
+    figure:nth-child(1) :is(.figure-image-container, .filler) {
+      grid-column: 1 / 2;
+    }
+    figure:nth-child(2) :is(.figure-image-container, .filler) {
+      grid-column: 2 / 3;
+    }
+    figure:nth-child(3) :is(.figure-image-container, .filler) {
+      grid-column: 1 / 2;
+    }
+    figure:nth-child(4) :is(.figure-image-container, .filler) {
+      grid-column: 2 / 3;
+    }
+  }
+</style>
